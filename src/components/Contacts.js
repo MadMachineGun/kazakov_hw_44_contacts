@@ -1,6 +1,8 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import ContactForm from './ContactForm';
+import Button from 'react-bootstrap/Button';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './contacts.scss';
 
 export default function Contacts() {
@@ -50,17 +52,20 @@ export default function Contacts() {
                         <td>{contact.username}</td>
                         <td>{contact.phone}</td>
                         <td>
-                            <button onClick={() => handleDelete(contact.id)}>Delete</button>
+                            <Button variant="danger" onClick={() => handleDelete(contact.id)}>
+                                Delete
+                            </Button>
                         </td>
                     </tr>
                 ))}
                 </tbody>
             </table>
             <div>
-                <button onClick={handleShowForm}>Add contact</button>
+                <Button variant="primary" onClick={handleShowForm}>
+                    Add contact
+                </Button>
             </div>
-            {showForm && <ContactForm onClose={handleHideForm} onAddContact={handleAddContact}/>}
+            {showForm && <ContactForm onClose={handleHideForm} onAddContact={handleAddContact} />}
         </div>
     );
 }
-
