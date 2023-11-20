@@ -1,60 +1,133 @@
-import React from 'react';
-import { useFormik } from 'formik';
-import './contact-form.scss';
+import React, {useState} from 'react';
+import {Form, Button, Row, Col, Toast} from 'react-bootstrap';
+import {Formik, Field, ErrorMessage} from 'formik';
+import 'react-toastify/dist/ReactToastify.css';
+import './contacts.scss';
 
-export default function ContactForm({ onClose }) {
-    const formik = useFormik({
-        initialValues: {
-            name: '',
-            surname: '',
-            phone: '',
-        },
-        onSubmit: (values) => {
-            console.log('Форма:', values);
+export default function ContactForm({onClose, onAddContact}) {
+    const [isFormSubmitted, setFormSubmitted] = useState(false);
+
+    const submitForm = (values, {resetForm}) => {
+        if (values.firstName && values.surName && values.eMail) {
+            if (!validateEmail(values.eMail) || !validatePhone(values.telNumber)) {
+                return;
+            }
+            onAddContact(values);
+            setFormSubmitted(true);
+            resetForm();
             onClose();
-        },
-    });
+        } else {
+
+        }
+    };
+
+    const validateEmail = (value) => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return !value || emailRegex.test(value);
+    };
+
+    const validatePhone = (value) => {
+        const phoneRegex = /^\+380\d{9}$/;
+        return !value || phoneRegex.test(value);
+    };
+
+    const handleCloseSuccess = () => {
+        setFormSubmitted(false);
+    };
 
     return (
-        <div className="contact-form-container">
-            <h2>Добавить новый контакт</h2>
-            <form onSubmit={formik.handleSubmit}>
-                <label>
-                    Имя:
-                    <input
-                        type="text"
-                        id="name"
-                        name="name"
-                        onChange={formik.handleChange}
-                        value={formik.values.name}
-                    />
-                </label>
-                <br />
-                <label>
-                    Фамилия:
-                    <input
-                        type="text"
-                        id="surname"
-                        name="surname"
-                        onChange={formik.handleChange}
-                        value={formik.values.surname}
-                    />
-                </label>
-                <br />
-                <label>
-                    Телефон:
-                    <input
-                        type="text"
-                        id="phone"
-                        name="phone"
-                        onChange={formik.handleChange}
-                        value={formik.values.phone}
-                    />
-                </label>
-                <br />
-                <button type="submit">Сохранить</button>
-                <button type="button" onClick={onClose}>Отмена</button>
-            </form>
-        </div>
+        <>
+            <div className='contact-form'>
+                <Formik
+                    initialValues={{
+                        firstName: '',
+                        surName: '',
+                        eMail: '',
+                        telNumber: '',
+                    }}
+                    onSubmit={submitForm}
+                >
+                    {(formik) => (
+                        <Form className='form'>
+                            <Row>
+                                <Col>
+                                    <Form.Group>
+                                        <Form.Label>First Name:</Form.Label>
+                                        <Field
+                                            as={Form.Control}
+                                            type='text'
+                                            name='firstName'
+                                            isInvalid={formik.touched.firstName && !formik.values.firstName}
+                                        />
+                                        <ErrorMessage name='firstName' component={Form.Control.Feedback}
+                                                      type='invalid'/>
+                                    </Form.Group>
+                                </Col>
+                                <Col>
+                                    <Form.Group>
+                                        <Form.Label>Surname:</Form.Label>
+                                        <Field
+                                            as={Form.Control}
+                                            type='text'
+                                            name='surName'
+                                            isInvalid={formik.touched.surName && !formik.values.surName}
+                                        />
+                                        <ErrorMessage name='surName' component={Form.Control.Feedback} type='invalid'/>
+                                    </Form.Group>
+                                </Col>
+                            </Row>
+                            <Form.Group>
+                                <Form.Label>Email:</Form.Label>
+                                <Field
+                                    as={Form.Control}
+                                    type='text'
+                                    name='eMail'
+                                    placeholder="example@example.com"
+                                    validate={validateEmail}
+                                    isInvalid={formik.touched.eMail && !!formik.errors.eMail}
+                                />
+                                <ErrorMessage name='eMail' component={Form.Control.Feedback} type='invalid'/>
+                            </Form.Group>
+                            <Form.Group>
+                                <Form.Label>Phone:</Form.Label>
+                                <Field
+                                    as={Form.Control}
+                                    type='text'
+                                    name='telNumber'
+                                    placeholder="+380000000000"
+                                    validate={validatePhone}
+                                    isInvalid={formik.touched.telNumber && !!formik.errors.telNumber}
+                                />
+                                <ErrorMessage name='telNumber' component={Form.Control.Feedback} type='invalid'/>
+                            </Form.Group>
+                            <Row>
+                                <Col>
+                                    <Button type='submit' variant='primary'>
+                                        Save
+                                    </Button>
+                                </Col>
+                                <Col>
+                                    <Button type='button' variant='secondary' onClick={onClose}>
+                                        Cancel
+                                    </Button>
+                                </Col>
+                            </Row>
+                        </Form>
+                    )}
+                </Formik>
+                <Toast
+                    show={isFormSubmitted}
+                    onClose={handleCloseSuccess}
+                    delay={3000}
+                    autohide
+                    className='toast'
+                >
+                    <Toast.Header>
+                        <strong className='mr-auto'>Contact added successfully!</strong>
+                    </Toast.Header>
+                    <Toast.Body>Thank you.</Toast.Body>
+                </Toast>
+            </div>
+        </>
     );
 }

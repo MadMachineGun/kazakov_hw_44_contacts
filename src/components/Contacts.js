@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import ContactForm from './ContactForm';
-import './contact-form.scss';
+import './contacts.scss';
 
 export default function Contacts() {
     const [contacts, setContacts] = useState([]);
@@ -14,6 +14,15 @@ export default function Contacts() {
     }, []);
 
     const handleDelete = (contactId) => {
+        console.log(`Deleting contact with ID: ${contactId}`);
+        setContacts(prevContacts => prevContacts.filter(contact => contact.id !== contactId));
+    };
+
+    const handleAddContact = (newContact) => {
+        // Add contact logic
+        // Note: This is a placeholder, you need to implement the actual logic to add a contact
+        console.log('Adding new contact:', newContact);
+        setContacts(prevContacts => [...prevContacts, newContact]);
     };
 
     const handleShowForm = () => {
@@ -52,7 +61,8 @@ export default function Contacts() {
             <div>
                 <button onClick={handleShowForm}>Add contact</button>
             </div>
-            {showForm && <ContactForm onClose={handleHideForm}/>}
+            {showForm && <ContactForm onClose={handleHideForm} onAddContact={handleAddContact}/>}
         </div>
     );
 }
+
