@@ -19,8 +19,6 @@ export default function Contacts() {
     };
 
     const handleAddContact = (newContact) => {
-        // Add contact logic
-        // Note: This is a placeholder, you need to implement the actual logic to add a contact
         console.log('Adding new contact:', newContact);
         setContacts(prevContacts => [...prevContacts, newContact]);
     };
