@@ -4,6 +4,7 @@ import {Formik, Field, ErrorMessage} from 'formik';
 import 'react-toastify/dist/ReactToastify.css';
 import './contacts.scss';
 
+
 export default function ContactForm({onClose, onAddContact}) {
     const [isFormSubmitted, setFormSubmitted] = useState(false);
 
