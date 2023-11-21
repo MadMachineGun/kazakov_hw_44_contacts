@@ -44,6 +44,7 @@
       background-color: #2ecc71;
       color: #fff;
 
+
       &:hover {
         background-color: #27ae60;
       }
@@ -53,6 +54,7 @@
       background-color: #ccc;
       color: #fff;
 
+
       &:hover {
         background-color: #b0aeae;
       }
@@ -61,6 +63,7 @@
     .btn-add-contact {
       background-color: #3498db;
       color: #fff;
+
 
       &:hover {
         background-color: #2980b9;
@@ -87,4 +90,16 @@
     bottom: 20px;
     right: 20px;
   }
+}
+
+.main-page-container > div:nth-child(3) > button:nth-child(1) {
+  margin-top: 1em;
+}
+
+div.row:nth-child(4) > div:nth-child(1) > button:nth-child(1) {
+  margin-top: 1em;
+}
+
+.btn-secondary {
+  margin-top: 1em;
 }

@@ -1,8 +1,11 @@
-import React from 'react';
-import { Form, Button, Row, Col } from 'react-bootstrap';
+
+import React, { useState } from 'react';
+import { Form, Button, Row, Col, Alert } from 'react-bootstrap';
 import { Formik, Field, ErrorMessage } from 'formik';
 
 export default function ContactForm({ onClose, onAddContact }) {
+    const [submitError, setSubmitError] = useState(null);
+
     const submitForm = async (values, { resetForm }) => {
         const errors = {};
         if (!values.firstName) {
@@ -12,10 +15,10 @@ export default function ContactForm({ onClose, onAddContact }) {
             errors.surName = 'Please enter a surname.';
         }
         if (!validatePhone(values.telNumber)) {
-            errors.telNumber = 'Invalid phone number format.';
+            errors.telNumber = 'Invalid phone number format. Please enter a valid phone number starting with +380.';
         }
         if (!validateEmail(values.eMail)) {
-            errors.eMail = 'Invalid email address format.';
+            errors.eMail = 'Invalid email address format. Please enter a valid email address.';
         }
 
         if (Object.keys(errors).length === 0) {
@@ -23,8 +26,7 @@ export default function ContactForm({ onClose, onAddContact }) {
             resetForm();
             onClose();
         } else {
-            // Возвращаем reject с ошибками, чтобы Formik не продолжал обработку формы
-            return Promise.reject(errors);
+            setSubmitError(errors);
         }
     };
 
@@ -37,7 +39,6 @@ export default function ContactForm({ onClose, onAddContact }) {
         const phoneRegex = /^\+380\d{9}$/;
         return !value || phoneRegex.test(value);
     };
-
 
     return (
         <div className='contact-form'>
@@ -52,6 +53,13 @@ export default function ContactForm({ onClose, onAddContact }) {
             >
                 {(formik) => (
                     <Form className='form' onSubmit={formik.handleSubmit}>
+                        {submitError && (
+                            <Alert variant='danger'>
+                                {Object.values(submitError).map((error, index) => (
+                                    <div key={index}>{error}</div>
+                                ))}
+                            </Alert>
+                        )}
                         <Row>
                             <Col>
                                 <Form.Group>
@@ -118,3 +126,5 @@ export default function ContactForm({ onClose, onAddContact }) {
         </div>
     );
 }
+
+
