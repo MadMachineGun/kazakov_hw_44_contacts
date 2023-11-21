@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Form, Button, Row, Col, Alert } from 'react-bootstrap';
 import { Formik, Field, ErrorMessage } from 'formik';
@@ -8,17 +7,17 @@ export default function ContactForm({ onClose, onAddContact }) {
 
     const submitForm = async (values, { resetForm }) => {
         const errors = {};
-        if (!values.firstName) {
-            errors.firstName = 'Please enter a first name.';
+        if (!values.name) {
+            errors.name = 'Please enter a first name.';
         }
-        if (!values.surName) {
-            errors.surName = 'Please enter a surname.';
+        if (!values.username) {
+            errors.username = 'Please enter a surname.';
         }
-        if (!validatePhone(values.telNumber)) {
-            errors.telNumber = 'Invalid phone number format. Please enter a valid phone number starting with +380.';
+        if (!validatePhone(values.phone)) {
+            errors.phone = 'Invalid phone number format. Please enter a valid phone number starting with +380.';
         }
-        if (!validateEmail(values.eMail)) {
-            errors.eMail = 'Invalid email address format. Please enter a valid email address.';
+        if (!validateEmail(values.email)) {
+            errors.email = 'Invalid email address format. Please enter a valid email address.';
         }
 
         if (Object.keys(errors).length === 0) {
@@ -44,10 +43,10 @@ export default function ContactForm({ onClose, onAddContact }) {
         <div className='contact-form'>
             <Formik
                 initialValues={{
-                    firstName: '',
-                    surName: '',
-                    eMail: '',
-                    telNumber: '',
+                    name: '',
+                    username: '',
+                    email: '',
+                    phone: '',
                 }}
                 onSubmit={submitForm}
             >
@@ -67,10 +66,10 @@ export default function ContactForm({ onClose, onAddContact }) {
                                     <Field
                                         as={Form.Control}
                                         type='text'
-                                        name='firstName'
-                                        isInvalid={formik.touched.firstName && !!formik.errors.firstName}
+                                        name='name'
+                                        isInvalid={formik.touched.name && !!formik.errors.name}
                                     />
-                                    <ErrorMessage name='firstName' component={Form.Control.Feedback} type='invalid' />
+                                    <ErrorMessage name='name' component={Form.Control.Feedback} type='invalid' />
                                 </Form.Group>
                             </Col>
                             <Col>
@@ -79,10 +78,10 @@ export default function ContactForm({ onClose, onAddContact }) {
                                     <Field
                                         as={Form.Control}
                                         type='text'
-                                        name='surName'
-                                        isInvalid={formik.touched.surName && !!formik.errors.surName}
+                                        name='username'
+                                        isInvalid={formik.touched.username && !!formik.errors.username}
                                     />
-                                    <ErrorMessage name='surName' component={Form.Control.Feedback} type='invalid' />
+                                    <ErrorMessage name='username' component={Form.Control.Feedback} type='invalid' />
                                 </Form.Group>
                             </Col>
                         </Row>
@@ -91,22 +90,22 @@ export default function ContactForm({ onClose, onAddContact }) {
                             <Field
                                 as={Form.Control}
                                 type='text'
-                                name='eMail'
+                                name='email'
                                 placeholder='example@example.com'
-                                isInvalid={formik.touched.eMail && !!formik.errors.eMail}
+                                isInvalid={formik.touched.email && !!formik.errors.email}
                             />
-                            <ErrorMessage name='eMail' component={Form.Control.Feedback} type='invalid' />
+                            <ErrorMessage name='email' component={Form.Control.Feedback} type='invalid' />
                         </Form.Group>
                         <Form.Group>
                             <Form.Label>Phone:</Form.Label>
                             <Field
                                 as={Form.Control}
                                 type='text'
-                                name='telNumber'
+                                name='phone'
                                 placeholder='+380000000000'
-                                isInvalid={formik.touched.telNumber && !!formik.errors.telNumber}
+                                isInvalid={formik.touched.phone && !!formik.errors.phone}
                             />
-                            <ErrorMessage name='telNumber' component={Form.Control.Feedback} type='invalid' />
+                            <ErrorMessage name='phone' component={Form.Control.Feedback} type='invalid' />
                         </Form.Group>
                         <Row>
                             <Col>
@@ -126,5 +125,3 @@ export default function ContactForm({ onClose, onAddContact }) {
         </div>
     );
 }
-
-

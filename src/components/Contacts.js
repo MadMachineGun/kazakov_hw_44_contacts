@@ -1,7 +1,6 @@
-
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import axios from 'axios';
-import { v4 as uuidv4 } from 'uuid';
+import {v4 as uuidv4} from 'uuid';
 import ContactForm from './ContactForm';
 import ContactTable from './ContactTable';
 import Button from 'react-bootstrap/Button';
@@ -20,7 +19,7 @@ export default function Contacts() {
             .then((response) => {
                 const contactsWithId = response.data.slice(0, 5).map((contact) => ({
                     ...contact,
-                    id: uuidv4(), // генерируем уникальный id с использованием uuid
+                    id: uuidv4(),
                 }));
                 setLocalContacts(contactsWithId);
             })
@@ -38,18 +37,18 @@ export default function Contacts() {
         if (validateContact(newContact)) {
             setLocalContacts((prevContacts) => [...prevContacts, newContact]);
             setShowForm(false);
+            console.log('Contacts after adding:', localContacts);
         } else {
             setErrorAlert('Invalid contact information. Please check the fields.');
         }
     };
 
     const validateContact = (contact) => {
-        // Your contact validation logic here
         return (
-            contact.firstName &&
-            contact.surName &&
-            validatePhone(contact.telNumber) &&
-            validateEmail(contact.eMail)
+            contact.name &&
+            contact.username &&
+            validatePhone(contact.phone) &&
+            validateEmail(contact.email)
         );
     };
 
@@ -77,15 +76,13 @@ export default function Contacts() {
         <div className='main-page-container'>
             <h2>Contacts</h2>
             {errorAlert && <Alert variant='danger'>{errorAlert}</Alert>}
-            <ContactTable contacts={localContacts} onDelete={handleDelete} />
+            <ContactTable contacts={localContacts} onDelete={handleDelete}/>
             <div>
                 <Button onClick={handleShowForm}>Add contact</Button>
             </div>
             {showForm && (
-                <ContactForm onClose={handleHideForm} onAddContact={handleAddContact} />
+                <ContactForm onClose={handleHideForm} onAddContact={handleAddContact}/>
             )}
         </div>
     );
 }
-
-

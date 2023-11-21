@@ -14,8 +14,8 @@ export default function ContactTable({ contacts, onDelete }) {
             </tr>
             </thead>
             <tbody>
-            {contacts.map((contact) => (
-                <tr key={contact.id}>
+            {contacts.map((contact, index) => (
+                <tr key={contact.id || index}>
                     <td>{contact.name}</td>
                     <td>{contact.username}</td>
                     <td>{contact.email}</td>
