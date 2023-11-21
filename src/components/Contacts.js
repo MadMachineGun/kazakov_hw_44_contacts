@@ -1,29 +1,34 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import ContactForm from './ContactForm';
+import ContactTable from './ContactTable';
 import Button from 'react-bootstrap/Button';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './contacts.scss';
 
 export default function Contacts() {
-    const [contacts, setContacts] = useState([]);
+    const [localContacts, setLocalContacts] = useState([]);
     const [showForm, setShowForm] = useState(false);
 
     useEffect(() => {
-        axios.get('https://jsonplaceholder.typicode.com/users')
-            .then(response => setContacts(response.data))
-            .catch(error => console.error('Error fetching contacts:', error));
+        axios
+            .get('https://jsonplaceholder.typicode.com/users')
+            .then((response) => setLocalContacts(response.data.slice(0, 5)))
+            .catch((error) => console.error('Error fetching contacts:', error));
     }, []);
 
     const handleDelete = (contactId) => {
         console.log(`Deleting contact with ID: ${contactId}`);
-        setContacts(prevContacts => prevContacts.filter(contact => contact.id !== contactId));
+        setLocalContacts((prevContacts) =>
+            prevContacts.filter((contact) => contact.id !== contactId)
+        );
     };
 
-    const handleAddContact = (newContact) => {
-        console.log('Adding new contact:', newContact);
-        setContacts(prevContacts => [...prevContacts, newContact]);
+     const handleAddContact = (newContact) => {
+        setLocalContacts((prevContacts) => [...prevContacts, newContact]);
+        setShowForm(false);
     };
+
 
     const handleShowForm = () => {
         setShowForm(true);
@@ -34,36 +39,11 @@ export default function Contacts() {
     };
 
     return (
-        <div className="main-page-container">
+        <div className='main-page-container'>
             <h2>Contacts</h2>
-            <table>
-                <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Surname</th>
-                    <th>Phone</th>
-                    <th>Actions</th>
-                </tr>
-                </thead>
-                <tbody>
-                {contacts.map(contact => (
-                    <tr key={contact.id}>
-                        <td>{contact.name}</td>
-                        <td>{contact.username}</td>
-                        <td>{contact.phone}</td>
-                        <td>
-                            <Button variant="danger" onClick={() => handleDelete(contact.id)}>
-                                Delete
-                            </Button>
-                        </td>
-                    </tr>
-                ))}
-                </tbody>
-            </table>
+            <ContactTable contacts={localContacts} onDelete={handleDelete} />
             <div>
-                <Button variant="primary" onClick={handleShowForm}>
-                    Add contact
-                </Button>
+                <Button onClick={handleShowForm}>Add contact</Button>
             </div>
             {showForm && <ContactForm onClose={handleHideForm} onAddContact={handleAddContact} />}
         </div>
